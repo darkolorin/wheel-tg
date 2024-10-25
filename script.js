@@ -48,11 +48,15 @@ function drawWheel() {
     });
 }
 
+function updateAllBalanceDisplays() {
+    document.getElementById('balance').textContent = `Balance: ${balance}`;
+    document.getElementById('coin-balance').textContent = `Balance: ${balance}`;
+    document.getElementById('total-balance').textContent = balance;
+}
+
 function updateBalance(newBalance) {
     balance = newBalance;
-    // Update balance display in both tabs
-    document.getElementById('balance').textContent = `Balance: ${balance}`;
-    document.getElementById('total-balance').textContent = balance;
+    updateAllBalanceDisplays();
 }
 
 function spin() {
@@ -118,6 +122,60 @@ function spin() {
 
     animate();
 }
+
+// Add coin flip game logic
+let isFlipping = false;
+
+function flipCoin() {
+    const betAmount = parseInt(document.getElementById('bet-amount').value);
+    
+    if (isFlipping || !betAmount || betAmount <= 0 || betAmount > balance) return;
+    
+    isFlipping = true;
+    const flipBtn = document.getElementById('flip-btn');
+    flipBtn.disabled = true;
+    
+    // Deduct bet amount
+    updateBalance(balance - betAmount);
+    
+    const coin = document.getElementById('coin');
+    const resultElement = document.getElementById('coin-result');
+    
+    // Remove previous flip class and void animation
+    coin.classList.remove('flip');
+    void coin.offsetWidth;
+    
+    // Add flip animation
+    coin.classList.add('flip');
+    
+    // Determine result (50/50 chance)
+    const win = Math.random() < 0.5;
+    
+    setTimeout(() => {
+        if (win) {
+            const winAmount = betAmount * 2;
+            updateBalance(balance + winAmount);
+            resultElement.textContent = `You won ${winAmount} coins!`;
+            
+            // Update biggest win if necessary
+            if (winAmount > biggestWin) {
+                biggestWin = winAmount;
+                document.getElementById('biggest-win').textContent = biggestWin;
+            }
+        } else {
+            resultElement.textContent = 'You lost!';
+        }
+        
+        isFlipping = false;
+        flipBtn.disabled = false;
+    }, 3000);
+}
+
+// Add event listener for coin flip
+document.getElementById('flip-btn').addEventListener('click', flipCoin);
+
+// Update initial balance displays
+updateAllBalanceDisplays();
 
 document.getElementById('spin-btn').addEventListener('click', spin);
 drawWheel();
