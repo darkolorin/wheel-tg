@@ -1,2 +1,2 @@
 # wheel-tg
-Wheel TG app
+Wheel TG app made via Cursor AI
