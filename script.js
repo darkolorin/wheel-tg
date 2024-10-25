@@ -95,8 +95,13 @@ function spin() {
                 Math.floor(normalizedRotation / segmentAngle);
             const result = segments[winningIndex % segments.length];
             
-            // Update balance and show result
+            // First update the balance
             const winAmount = 10 * result.multiplier;
+            if (result.multiplier > 0) {
+                updateBalance(balance + winAmount);
+            }
+            
+            // Then show the result message
             const resultElement = document.getElementById('result');
             
             if (result.multiplier === 0) {
@@ -107,8 +112,6 @@ function spin() {
                     biggestWin = winAmount;
                     document.getElementById('biggest-win').textContent = biggestWin;
                 }
-                // Update balance after win
-                updateBalance(balance + winAmount);
             }
         }
     }
