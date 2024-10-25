@@ -48,6 +48,13 @@ function drawWheel() {
     });
 }
 
+function updateBalance(newBalance) {
+    balance = newBalance;
+    // Update balance display in both tabs
+    document.getElementById('balance').textContent = `Balance: ${balance}`;
+    document.getElementById('total-balance').textContent = balance;
+}
+
 function spin() {
     if (isSpinning || balance <= 0) return;
     
@@ -55,11 +62,10 @@ function spin() {
     const spinBtn = document.getElementById('spin-btn');
     spinBtn.disabled = true;
     
-    balance -= 10;
+    // Update balance after deducting spin cost
+    updateBalance(balance - 10);
     totalSpins++;
     document.getElementById('total-spins').textContent = totalSpins;
-    document.getElementById('balance').textContent = `Balance: ${balance}`;
-    document.getElementById('total-balance').textContent = balance;
 
     const spinDuration = 3000; // 3 seconds
     const startTime = Date.now();
@@ -91,7 +97,6 @@ function spin() {
             
             // Update balance and show result
             const winAmount = 10 * result.multiplier;
-            balance += winAmount;
             const resultElement = document.getElementById('result');
             
             if (result.multiplier === 0) {
@@ -102,9 +107,9 @@ function spin() {
                     biggestWin = winAmount;
                     document.getElementById('biggest-win').textContent = biggestWin;
                 }
+                // Update balance after win
+                updateBalance(balance + winAmount);
             }
-            
-            document.getElementById('balance').textContent = `Balance: ${balance}`;
         }
     }
 
