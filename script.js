@@ -127,9 +127,14 @@ function spin() {
 let isFlipping = false;
 
 function flipCoin() {
-    const betAmount = parseInt(document.getElementById('bet-amount').value);
+    const betAmount = 20; // Fixed bet amount
     
-    if (isFlipping || !betAmount || betAmount <= 0 || betAmount > balance) return;
+    if (isFlipping) return;
+    
+    if (balance < betAmount) {
+        document.getElementById('coin-result').textContent = 'Insufficient balance!';
+        return;
+    }
     
     isFlipping = true;
     const flipBtn = document.getElementById('flip-btn');
@@ -141,6 +146,9 @@ function flipCoin() {
     const coin = document.getElementById('coin');
     const resultElement = document.getElementById('coin-result');
     
+    // Clear previous result
+    resultElement.textContent = '';
+    
     // Remove previous flip class and void animation
     coin.classList.remove('flip');
     void coin.offsetWidth;
@@ -150,6 +158,9 @@ function flipCoin() {
     
     // Determine result (50/50 chance)
     const win = Math.random() < 0.5;
+    
+    // Set final rotation based on result
+    coin.style.transform = `rotateY(${win ? 1800 : 1980}deg)`; // 1800 = heads (win), 1980 = tails (lose)
     
     setTimeout(() => {
         if (win) {
@@ -168,6 +179,12 @@ function flipCoin() {
         
         isFlipping = false;
         flipBtn.disabled = false;
+        
+        // Reset coin transform after animation
+        setTimeout(() => {
+            coin.style.transform = 'rotateY(0)';
+            coin.classList.remove('flip');
+        }, 1000);
     }, 3000);
 }
 
