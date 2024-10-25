@@ -8,14 +8,41 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <div class="wheel-container">
-            <canvas id="wheel" width="300" height="300"></canvas>
-            <button id="spin-btn">SPIN</button>
-        </div>
-        <div class="result" id="result"></div>
-        <div class="balance" id="balance">Balance: 100</div>
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="game">Game</button>
+        <button class="tab-btn" data-tab="profile">Profile</button>
     </div>
+
+    <div class="tab-content" id="game-tab">
+        <canvas id="wheel" width="300" height="300"></canvas>
+        <div id="balance">Balance: 100</div>
+        <button id="spin-btn">SPIN (10 coins)</button>
+        <div id="result"></div>
+    </div>
+
+    <div class="tab-content" id="profile-tab" style="display: none;">
+        <div class="profile-container">
+            <div class="profile-header">
+                <img id="profile-photo" src="default-avatar.png" alt="Profile Photo">
+                <h2 id="profile-name">Player</h2>
+            </div>
+            <div class="stats-container">
+                <div class="stat-item">
+                    <span class="stat-label">Total Balance</span>
+                    <span id="total-balance" class="stat-value">100</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Total Spins</span>
+                    <span id="total-spins" class="stat-value">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Biggest Win</span>
+                    <span id="biggest-win" class="stat-value">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>

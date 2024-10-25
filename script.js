@@ -1,4 +1,6 @@
 let balance = 100;
+let totalSpins = 0;
+let biggestWin = 0;
 const segments = [
     { text: "x2", color: "#FF6B6B", multiplier: 2 },
     { text: "LOSE", color: "#4ECDC4", multiplier: 0 },
@@ -53,9 +55,11 @@ function spin() {
     const spinBtn = document.getElementById('spin-btn');
     spinBtn.disabled = true;
     
-    // Deduct 10 from balance for each spin
     balance -= 10;
+    totalSpins++;
+    document.getElementById('total-spins').textContent = totalSpins;
     document.getElementById('balance').textContent = `Balance: ${balance}`;
+    document.getElementById('total-balance').textContent = balance;
 
     const spinDuration = 3000; // 3 seconds
     const startTime = Date.now();
@@ -94,6 +98,10 @@ function spin() {
                 resultElement.textContent = "You lost!";
             } else {
                 resultElement.textContent = `You won ${winAmount}!`;
+                if (winAmount > biggestWin) {
+                    biggestWin = winAmount;
+                    document.getElementById('biggest-win').textContent = biggestWin;
+                }
             }
             
             document.getElementById('balance').textContent = `Balance: ${balance}`;
@@ -106,6 +114,35 @@ function spin() {
 document.getElementById('spin-btn').addEventListener('click', spin);
 drawWheel();
 
-// Initialize Telegram WebApp
+// Add tab switching functionality
+document.querySelectorAll('.tab-btn').forEach(button => {
+    button.addEventListener('click', () => {
+        // Remove active class from all buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        
+        // Add active class to clicked button
+        button.classList.add('active');
+        
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.style.display = 'none';
+        });
+        
+        // Show selected tab content
+        const tabId = button.getAttribute('data-tab');
+        document.getElementById(`${tabId}-tab`).style.display = 'block';
+    });
+});
+
+// Initialize Telegram WebApp and user profile
 window.Telegram.WebApp.ready();
 window.Telegram.WebApp.expand();
+
+// Get user info from Telegram
+const user = window.Telegram.WebApp.initDataUnsafe?.user;
+if (user) {
+    document.getElementById('profile-name').textContent = user.first_name;
+    if (user.photo_url) {
+        document.getElementById('profile-photo').src = user.photo_url;
+    }
+}
