@@ -119,18 +119,24 @@ body {
     width: 150px;
     height: 150px;
     position: relative;
-    transform-style: preserve-3d;
     margin: 30px auto;
-    transition: transform 3s ease-out;
+    perspective: 1000px; /* Add perspective for better 3D effect */
+}
+
+.coin.flip {
+    animation: flip 3s ease-out forwards;
 }
 
 .coin .heads,
 .coin .tails {
     position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     border-radius: 50%;
     backface-visibility: hidden;
+    -webkit-backface-visibility: hidden; /* For Safari */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -138,32 +144,43 @@ body {
     font-weight: bold;
     color: #fff;
     text-shadow: 0 0 5px rgba(0,0,0,0.5);
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
 }
 
 .coin .heads {
     background: linear-gradient(45deg, #FFD700, #FFA500);
-    transform: rotateY(0deg);
-}
-
-.coin .heads:after {
-    content: "WIN";
+    transform: rotateY(0);
+    -webkit-transform: rotateY(0);
+    z-index: 2;
 }
 
 .coin .tails {
     background: linear-gradient(45deg, #C0C0C0, #808080);
     transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg);
+    z-index: 1;
 }
 
-.coin .tails:after {
-    content: "LOSE";
+@keyframes flip {
+    0% {
+        transform: rotateY(0);
+        -webkit-transform: rotateY(0);
+    }
+    100% {
+        transform: rotateY(1800deg);
+        -webkit-transform: rotateY(1800deg);
+    }
 }
 
-#coin-result {
-    min-height: 24px;
-    margin-top: 20px;
-    font-size: 18px;
-    font-weight: bold;
-    color: #2481cc;
+/* Add webkit prefixes for Safari support */
+@-webkit-keyframes flip {
+    0% {
+        -webkit-transform: rotateY(0);
+    }
+    100% {
+        -webkit-transform: rotateY(1800deg);
+    }
 }
 
 /* Remove the bet-amount input styles since we don't need them anymore */

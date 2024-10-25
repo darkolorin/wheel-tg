@@ -127,7 +127,7 @@ function spin() {
 let isFlipping = false;
 
 function flipCoin() {
-    const betAmount = 20; // Fixed bet amount
+    const betAmount = 20;
     
     if (isFlipping) return;
     
@@ -140,27 +140,31 @@ function flipCoin() {
     const flipBtn = document.getElementById('flip-btn');
     flipBtn.disabled = true;
     
-    // Deduct bet amount
     updateBalance(balance - betAmount);
     
     const coin = document.getElementById('coin');
     const resultElement = document.getElementById('coin-result');
     
-    // Clear previous result
     resultElement.textContent = '';
     
-    // Remove previous flip class and void animation
+    // Reset any existing animations
     coin.classList.remove('flip');
     void coin.offsetWidth;
-    
-    // Add flip animation
-    coin.classList.add('flip');
     
     // Determine result (50/50 chance)
     const win = Math.random() < 0.5;
     
-    // Set final rotation based on result
-    coin.style.transform = `rotateY(${win ? 1800 : 1980}deg)`; // 1800 = heads (win), 1980 = tails (lose)
+    // Add flip animation
+    coin.classList.add('flip');
+    
+    // Use transform for final state
+    if (win) {
+        coin.style.transform = 'rotateY(1800deg)';
+        coin.style.webkitTransform = 'rotateY(1800deg)';
+    } else {
+        coin.style.transform = 'rotateY(1980deg)';
+        coin.style.webkitTransform = 'rotateY(1980deg)';
+    }
     
     setTimeout(() => {
         if (win) {
@@ -168,7 +172,6 @@ function flipCoin() {
             updateBalance(balance + winAmount);
             resultElement.textContent = `You won ${winAmount} coins!`;
             
-            // Update biggest win if necessary
             if (winAmount > biggestWin) {
                 biggestWin = winAmount;
                 document.getElementById('biggest-win').textContent = biggestWin;
@@ -180,9 +183,10 @@ function flipCoin() {
         isFlipping = false;
         flipBtn.disabled = false;
         
-        // Reset coin transform after animation
+        // Reset coin position after animation
         setTimeout(() => {
             coin.style.transform = 'rotateY(0)';
+            coin.style.webkitTransform = 'rotateY(0)';
             coin.classList.remove('flip');
         }, 1000);
     }, 3000);
