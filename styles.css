@@ -120,7 +120,7 @@ body {
     height: 150px;
     position: relative;
     margin: 30px auto;
-    perspective: 1000px; /* Add perspective for better 3D effect */
+    perspective: 1000px;
 }
 
 .coin.flip {
@@ -136,16 +136,14 @@ body {
     height: 100%;
     border-radius: 50%;
     backface-visibility: hidden;
-    -webkit-backface-visibility: hidden; /* For Safari */
+    -webkit-backface-visibility: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
+    font-size: 32px;
     font-weight: bold;
     color: #fff;
-    text-shadow: 0 0 5px rgba(0,0,0,0.5);
-    transform-style: preserve-3d;
-    -webkit-transform-style: preserve-3d;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
 
 .coin .heads {
@@ -155,11 +153,23 @@ body {
     z-index: 2;
 }
 
+.coin .heads:after {
+    content: "WIN";
+    position: relative;
+    z-index: 3;
+}
+
 .coin .tails {
     background: linear-gradient(45deg, #C0C0C0, #808080);
     transform: rotateY(180deg);
     -webkit-transform: rotateY(180deg);
     z-index: 1;
+}
+
+.coin .tails:after {
+    content: "LOSE";
+    position: relative;
+    z-index: 3;
 }
 
 @keyframes flip {
